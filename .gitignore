@@ -1,3 +1,4 @@
 .idea
 scala-common
 user-service
+deployment/secret-values.yml
