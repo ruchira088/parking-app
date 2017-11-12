@@ -17,7 +17,7 @@ spec:
             - name: DB_TYPE
               value: "postgresql"
             - name: DB_HOST
-              value: "postgres-service"
+              value: "artifactory-postgres-service"
             - name: DB_PORT
               value: "5432"
             - name: DB_USER
