@@ -38,19 +38,19 @@ metadata:
 spec:
   selector:
     app: artifactory-app
-  type: NodePort
+  type: LoadBalancer
   ports:
     - port: 8081
-#---
-#apiVersion: autoscaling/v1
-#kind: HorizontalPodAutoscaler
-#metadata:
-#  name: artifactory-autoscaler
-#spec:
-#  scaleTargetRef:
-#    apiVersion: apps/v1beta1
-#    kind: Deployment
-#    name: artifactory-deployment
-#  minReplicas: 1
-#  maxReplicas: 5
-#  targetCPUUtilizationPercentage: 40
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: artifactory-autoscaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta1
+    kind: Deployment
+    name: artifactory-deployment
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 40

@@ -18,7 +18,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
+      storage: 20Gi
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
@@ -51,6 +51,8 @@ spec:
                   key: artifactoryPostgresUser
             - name: POSTGRES_DB
               value: artifactory
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
       volumes:
         - name: artifactory-postgres-persistent-storage
           persistentVolumeClaim:
