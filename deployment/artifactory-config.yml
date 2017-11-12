@@ -1,0 +1,56 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: artifactory-deployment
+spec:
+  template:
+    metadata:
+      labels:
+        app: artifactory-app
+    spec:
+      containers:
+        - name: artifactory-container
+          image: docker.bintray.io/jfrog/artifactory-oss
+          ports:
+            - containerPort: 8081
+          env:
+            - name: DB_TYPE
+              value: "postgresql"
+            - name: DB_HOST
+              value: "postgres-service"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: artifactoryPostgresUser
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: artifactoryPostgresPassword
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: artifactory-service
+spec:
+  selector:
+    app: artifactory-app
+  type: NodePort
+  ports:
+    - port: 8081
+#---
+#apiVersion: autoscaling/v1
+#kind: HorizontalPodAutoscaler
+#metadata:
+#  name: artifactory-autoscaler
+#spec:
+#  scaleTargetRef:
+#    apiVersion: apps/v1beta1
+#    kind: Deployment
+#    name: artifactory-deployment
+#  minReplicas: 1
+#  maxReplicas: 5
+#  targetCPUUtilizationPercentage: 40

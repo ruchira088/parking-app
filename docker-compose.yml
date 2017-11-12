@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+
+  postgres-database:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=passw0rd
+      - POSTGRES_USER=juno
+      - POSTGRES_DB=user-service
+
+  user-service:
+    build: ./user-service
+    volumes:
+      - "~/.sbt:/root/.sbt"
+      - "~/.ivy2:/root/.ivy2"
+      - "./user-service:/opt/user-service"
+      - "/opt/user-service/target/"
+    ports:
+      - 9000:9000
+      - 5005:5005
+    environment:
+      - POSTGRES_URL=jdbc:postgresql://postgres-database:5432/user-service
+      - POSTGRES_USER=juno
+      - POSTGRES_PASSWORD=passw0rd
