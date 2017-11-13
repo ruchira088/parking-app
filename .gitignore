@@ -1,4 +1,5 @@
 .idea
 scala-common
 user-service
+api-gateway
 deployment/K8s/secret-values.yml

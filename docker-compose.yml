@@ -13,6 +13,8 @@ services:
 
   user-service:
     build: ./user-service
+    depends_on:
+      - postgres-database
     volumes:
       - "~/.sbt:/root/.sbt"
       - "~/.ivy2:/root/.ivy2"
@@ -25,3 +27,18 @@ services:
       - POSTGRES_URL=jdbc:postgresql://postgres-database:5432/user-service
       - POSTGRES_USER=juno
       - POSTGRES_PASSWORD=passw0rd
+
+  api-gateway:
+    build: ./api-gateway
+    depends_on:
+      - user-service
+    volumes:
+      - "~/.sbt:/root/.sbt"
+      - "~/.ivy2:/root/.ivy2"
+      - "./api-gateway:/opt/api-gateway"
+      - "/opt/api-gateway/target"
+    ports:
+      - 9001:9000
+      - 5006:5005
+    environment:
+      - USER_SERVICE_URL=http://user-service:9000
